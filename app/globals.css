@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 142 72% 12%; /* Plus foncé pour un meilleur contraste */
+
+    --card: 0 0% 100%;
+    --card-foreground: 142 72% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 142 72% 12%;
+
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 142 33% 96%;
+    --secondary-foreground: 142 72% 25%;
+
+    --muted: 142 33% 96%;
+    --muted-foreground: 142 20% 40%; /* Plus foncé pour un meilleur contraste */
+
+    --accent: 142 33% 96%;
+    --accent-foreground: 142 72% 25%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 142 12% 90%;
+    --input: 142 12% 90%;
+    --ring: 142 76% 36%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 142 50% 4%;
+    --foreground: 142 10% 95%;
+
+    --card: 142 50% 4%;
+    --card-foreground: 142 10% 95%;
+
+    --popover: 142 50% 4%;
+    --popover-foreground: 142 10% 95%;
+
+    --primary: 142 76% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 142 30% 15%;
+    --secondary-foreground: 142 10% 95%;
+
+    --muted: 142 30% 15%;
+    --muted-foreground: 142 20% 70%; /* Plus clair pour un meilleur contraste */
+
+    --accent: 142 30% 15%;
+    --accent-foreground: 142 10% 95%;
+
+    --destructive: 0 74% 42%;
+    --destructive-foreground: 142 10% 95%;
+
+    --border: 142 30% 15%;
+    --input: 142 30% 15%;
+    --ring: 142 76% 36%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  /* Amélioration de l'accessibilité pour les éléments interactifs */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+  }
+
+  /* Amélioration de la lisibilité du texte */
+  p {
+    @apply leading-relaxed;
+  }
+}
+
+/* Styles personnalisés pour les popups Leaflet */
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding: 0;
+}
+
+.leaflet-popup-tip {
+  background-color: white;
+}
+
+.leaflet-popup-close-button {
+  color: #666;
+  font-size: 16px;
+  padding: 4px;
+  right: 4px;
+  top: 4px;
+}
+
+/* Styles d'accessibilité supplémentaires */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
