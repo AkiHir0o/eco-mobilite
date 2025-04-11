@@ -4,7 +4,7 @@ import type React from "react"
 
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
-import { motion, useScroll, useTransform, useInView } from "framer-motion"
+import { motion, useScroll, useTransform } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Calculator, Map, Users, Lightbulb, ChevronDown } from "lucide-react"
 import SiteHeader from "@/components/site-header"
@@ -46,16 +46,25 @@ const FeatureCard = ({
 }) => {
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay }} className="group">
-      <Link href={link} className="block h-full">
+      <Link
+        href={link}
+        className="block h-full focus:outline-none focus:ring-2 focus:ring-eco-600 focus:ring-offset-2 rounded-xl"
+        aria-labelledby={`feature-title-${title.replace(/\s+/g, "-").toLowerCase()}`}
+      >
         <div
           className={`h-full rounded-xl p-6 transition-all duration-300 ${color} hover:shadow-lg hover:-translate-y-1`}
         >
           <div className="mb-4 inline-flex rounded-full bg-white/20 p-3">{icon}</div>
-          <h3 className="mb-2 text-xl font-semibold">{title}</h3>
+          <h3 id={`feature-title-${title.replace(/\s+/g, "-").toLowerCase()}`} className="mb-2 text-xl font-semibold">
+            {title}
+          </h3>
           <p className="mb-4 text-sm opacity-90">{description}</p>
           <div className="flex items-center text-sm font-medium">
             <span>Découvrir</span>
-            <ArrowRight className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            <ArrowRight
+              className="ml-1 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1"
+              aria-hidden="true"
+            />
           </div>
         </div>
       </Link>
@@ -78,11 +87,12 @@ const StatItem = ({ value, label, delay = 0 }: { value: string; label: string; d
   )
 }
 
+// Import manquant
+import { useInView } from "framer-motion"
+
+// Ajouter un skip link au début du composant pour l'accessibilité
 export default function Home() {
   const { scrollYProgress } = useScroll()
-  // Modifier l'animation de scroll pour que l'éclaircissement commence plus bas
-  // Ajuster la valeur de scrollYProgress pour que l'effet commence plus tard
-
   const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
   const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.95])
   const [mounted, setMounted] = useState(false)
@@ -93,18 +103,26 @@ export default function Home() {
 
   return (
     <>
+      {/* Skip link pour l'accessibilité */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:z-[200] focus:bg-white focus:p-4 focus:text-eco-700"
+      >
+        Aller au contenu principal
+      </a>
       <SiteHeader />
-      <main className="relative overflow-hidden">
+      <main id="main-content" className="relative overflow-hidden">
         {/* Hero Section */}
         <motion.section
           style={{ opacity: heroOpacity, scale: heroScale }}
-          className="relative flex min-h-[90vh] flex-col items-center justify-center overflow-hidden text-white"
+          className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden text-white"
+          aria-labelledby="hero-heading"
         >
           <AnimatedGradient />
 
-          <div className="container relative z-10 mx-auto px-4 py-16 text-center">
+          <div className="container relative z-10 mx-auto px-4 py-8 text-center">
             <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-              <h1 className="mb-6 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
+              <h1 id="hero-heading" className="mb-4 text-4xl font-bold tracking-tight md:text-6xl lg:text-7xl">
                 <span className="block">Repensez vos</span>
                 <span className="bg-gradient-to-r from-eco-300 to-eco-100 bg-clip-text text-transparent">
                   déplacements quotidiens
@@ -138,15 +156,17 @@ export default function Home() {
             >
               <Link
                 href="/calculateur"
-                className="inline-flex h-12 items-center justify-center rounded-md bg-white px-6 py-3 text-[#0B5D2E] font-medium hover:bg-white/90 transition-colors"
+                className="inline-flex h-12 items-center justify-center rounded-md bg-white px-6 py-3 text-[#0B5D2E] font-medium hover:bg-white/90 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-eco-700"
+                aria-label="Calculer mon impact environnemental"
               >
-                Calculer mon impact <Calculator className="ml-2 h-4 w-4" />
+                Calculer mon impact <Calculator className="ml-2 h-4 w-4" aria-hidden="true" />
               </Link>
               <Link
                 href="/carte"
-                className="inline-flex h-12 items-center justify-center rounded-md bg-white px-6 py-3 text-[#0B5D2E] font-medium hover:bg-white/90 transition-colors"
+                className="inline-flex h-12 items-center justify-center rounded-md bg-white px-6 py-3 text-[#0B5D2E] font-medium hover:bg-white/90 transition-colors focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-eco-700"
+                aria-label="Explorer la carte interactive"
               >
-                Explorer la carte <Map className="ml-2 h-4 w-4" />
+                Explorer la carte <Map className="ml-2 h-4 w-4" aria-hidden="true" />
               </Link>
             </motion.div>
           </div>
@@ -156,6 +176,7 @@ export default function Home() {
             animate={{ opacity: 0.7 }}
             transition={{ delay: 1.2, duration: 1 }}
             className="absolute bottom-8 left-0 right-0 flex justify-center"
+            aria-hidden="true"
           >
             <ChevronDown className="h-8 w-8 animate-bounce text-white opacity-80" />
           </motion.div>
@@ -213,11 +234,13 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section className="bg-gradient-to-b from-eco-50 to-white py-20">
+        <section className="bg-gradient-to-b from-eco-50 to-white py-20" aria-labelledby="features-heading">
           <div className="container mx-auto px-4">
             <AnimatedSection>
               <div className="mx-auto mb-12 max-w-3xl text-center">
-                <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Découvrez nos fonctionnalités</h2>
+                <h2 id="features-heading" className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+                  Découvrez nos fonctionnalités
+                </h2>
                 <p className="text-lg text-gray-600">
                   ÉcoMouv' vous propose des outils pratiques pour faciliter votre transition vers une mobilité plus
                   douce.
@@ -227,7 +250,7 @@ export default function Home() {
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
               <FeatureCard
-                icon={<Calculator className="h-6 w-6 text-white" />}
+                icon={<Calculator className="h-6 w-6 text-white" aria-hidden="true" />}
                 title="Calculateur d'impact"
                 description="Mesurez l'impact environnemental, économique et sur votre santé de vos choix de mobilité."
                 link="/calculateur"
@@ -236,7 +259,7 @@ export default function Home() {
               />
 
               <FeatureCard
-                icon={<Map className="h-6 w-6 text-white" />}
+                icon={<Map className="h-6 w-6 text-white" aria-hidden="true" />}
                 title="Carte interactive"
                 description="Explorez les infrastructures de mobilité douce et trouvez les meilleurs itinéraires."
                 link="/carte"
@@ -245,7 +268,7 @@ export default function Home() {
               />
 
               <FeatureCard
-                icon={<Users className="h-6 w-6 text-white" />}
+                icon={<Users className="h-6 w-6 text-white" aria-hidden="true" />}
                 title="Défi communautaire"
                 description="Participez à des défis collectifs et suivez l'impact positif de la communauté."
                 link="/defi"
@@ -254,7 +277,7 @@ export default function Home() {
               />
 
               <FeatureCard
-                icon={<Lightbulb className="h-6 w-6 text-white" />}
+                icon={<Lightbulb className="h-6 w-6 text-white" aria-hidden="true" />}
                 title="Conseils pratiques"
                 description="Découvrez des astuces et recommandations pour adopter facilement les transports doux."
                 link="/conseils"
@@ -266,12 +289,14 @@ export default function Home() {
         </section>
 
         {/* Stats Section */}
-        <section className="bg-white py-20">
+        <section className="bg-white py-20" aria-labelledby="stats-heading">
           <div className="container mx-auto px-4">
             <AnimatedSection>
               <div className="mx-auto max-w-4xl rounded-2xl bg-gradient-to-r from-eco-700 to-eco-600 p-8 text-white shadow-lg md:p-12">
                 <div className="mb-8 text-center">
-                  <h2 className="mb-2 text-2xl font-bold md:text-3xl">Notre impact collectif</h2>
+                  <h2 id="stats-heading" className="mb-2 text-2xl font-bold md:text-3xl">
+                    Notre impact collectif
+                  </h2>
                   <p className="text-eco-100">Ensemble, nous faisons la différence pour notre planète</p>
                 </div>
 
@@ -279,7 +304,6 @@ export default function Home() {
                   <StatItem value="5 635" label="Participants" delay={0.1} />
                   <StatItem value="56,4" label="Tonnes de CO2 économisées" delay={0.2} />
                   <StatItem value="2 820" label="Arbres virtuels plantés" delay={0.3} />
-
                   <StatItem value="12 500" label="Trajets écologiques" delay={0.4} />
                 </div>
               </div>
@@ -310,11 +334,13 @@ export default function Home() {
         </section>
 
         {/* Testimonials */}
-        <section className="bg-white py-20">
+        <section className="bg-white py-20" aria-labelledby="testimonials-heading">
           <div className="container mx-auto px-4">
             <AnimatedSection>
               <div className="mx-auto mb-12 max-w-3xl text-center">
-                <h2 className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">Ce que disent nos utilisateurs</h2>
+                <h2 id="testimonials-heading" className="mb-4 text-3xl font-bold text-gray-900 md:text-4xl">
+                  Ce que disent nos utilisateurs
+                </h2>
                 <p className="text-lg text-gray-600">
                   Découvrez les témoignages de personnes qui ont adopté l'ÉcoMouv' au quotidien.
                 </p>
@@ -328,36 +354,47 @@ export default function Home() {
                   role: "Utilisatrice quotidienne du vélo",
                   quote:
                     "Grâce à ÉcoMouv', j'ai découvert des pistes cyclables sécurisées que je ne connaissais pas. J'économise maintenant 120€ par mois en transport !",
+                  rating: 5,
                 },
                 {
                   name: "Thomas M.",
                   role: "Adepte de la marche urbaine",
                   quote:
                     "L'application m'a aidé à prendre conscience de l'impact positif de mes déplacements à pied. Je me sens en meilleure forme et plus connecté à ma ville.",
+                  rating: 5,
                 },
                 {
                   name: "Léa K.",
                   role: "Utilisatrice multimodale",
                   quote:
                     "Je combine désormais vélo et transports en commun grâce aux conseils de l'app. Mon empreinte carbone a diminué de 40% en seulement 3 mois !",
+                  rating: 5,
                 },
               ].map((testimonial, index) => (
                 <AnimatedSection key={index} delay={0.1 * index}>
                   <div className="h-full rounded-lg border border-eco-100 bg-white p-6 shadow-sm">
-                    <div className="mb-4 flex">
+                    <div className="mb-4 flex" aria-label={`Note de ${testimonial.rating} sur 5`}>
                       {Array(5)
                         .fill(0)
                         .map((_, i) => (
-                          <svg key={i} className="h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                          <svg
+                            key={i}
+                            className="h-5 w-5 text-yellow-400"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            aria-hidden="true"
+                          >
                             <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                           </svg>
                         ))}
                     </div>
-                    <p className="mb-4 italic text-gray-600">"{testimonial.quote}"</p>
-                    <div>
-                      <p className="font-semibold text-eco-700">{testimonial.name}</p>
-                      <p className="text-sm text-gray-500">{testimonial.role}</p>
-                    </div>
+                    <blockquote>
+                      <p className="mb-4 italic text-gray-600">"{testimonial.quote}"</p>
+                      <footer>
+                        <p className="font-semibold text-eco-700">{testimonial.name}</p>
+                        <p className="text-sm text-gray-500">{testimonial.role}</p>
+                      </footer>
+                    </blockquote>
                   </div>
                 </AnimatedSection>
               ))}

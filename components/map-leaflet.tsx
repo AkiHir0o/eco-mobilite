@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, memo } from "react"
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet"
 import L from "leaflet"
 import "leaflet/dist/leaflet.css"
@@ -131,7 +131,8 @@ function SetViewOnChange({ center }: { center: [number, number] }) {
   return null
 }
 
-export default function MapLeaflet({ activeFilter }: { activeFilter: string | null }) {
+// Memoization du composant pour éviter les re-rendus inutiles
+const MapLeaflet = memo(function MapLeaflet({ activeFilter }: { activeFilter: string | null }) {
   const [selectedPoint, setSelectedPoint] = useState<MapPoint | null>(null)
   const mapRef = useRef<L.Map | null>(null)
   const [filteredPoints, setFilteredPoints] = useState<MapPoint[]>(mapPoints)
@@ -225,4 +226,6 @@ export default function MapLeaflet({ activeFilter }: { activeFilter: string | nu
       </MapContainer>
     </div>
   )
-}
+})
+
+export default MapLeaflet

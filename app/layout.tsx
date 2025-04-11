@@ -10,6 +10,15 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
   title: "ÉcoMouv' - Transports doux pour un avenir durable",
   description: "Découvrez l'impact positif des transports doux sur l'environnement, votre santé et votre budget.",
+  keywords: [
+    "mobilité durable",
+    "transport écologique",
+    "vélo",
+    "marche",
+    "empreinte carbone",
+    "calculateur d'impact",
+    "écomobilité",
+  ],
     generator: 'v0.dev'
 }
 
@@ -19,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr">
+    <html lang="fr" className="scroll-smooth">
       <head>
         {/* Ajout des styles Leaflet */}
         <link
